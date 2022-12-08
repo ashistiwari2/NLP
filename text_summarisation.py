@@ -174,11 +174,11 @@ if choice == 'Summarize Via Text':
     st.subheader("Summary using NLP")
     article_text = st.text_area("Enter Text Here", "Type here")
     # cleaning of input text
-    # article_text = re.sub(r'\\[[0-9]*\\]', ' ', article_text)
-    # article_text = re.sub('[^a-zA-Z.,]', ' ', article_text)
-    # article_text = re.sub(r"\b[a-zA-Z]\b", '', article_text)
-    # article_text = re.sub("[A-Z]\Z", '', article_text)
-    # article_text = re.sub(r'\s+', ' ', article_text)
+    article_text = re.sub(r'\\[[0-9]*\\]', ' ', article_text)
+    article_text = re.sub('[^a-zA-Z.,]', ' ', article_text)
+    article_text = re.sub(r"\b[a-zA-Z]\b", '', article_text)
+    article_text = re.sub("[A-Z]\Z", '', article_text)
+    article_text = re.sub(r'\s+', ' ', article_text)
 
     summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY"])
                                                      # "Genism"])
