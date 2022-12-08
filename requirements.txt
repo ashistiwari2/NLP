@@ -1,5 +1,6 @@
 ﻿altair==4.2.0
  sumy
+ gensim
 attrs==22.1.0
 azure-common==1.1.28
 backports.weakref==1.0.post1
