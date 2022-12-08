@@ -1,4 +1,5 @@
 import requests
+import time
 from bs4 import BeautifulSoup
 #genism package
 from gensim.summarization.summarizer import summarize
@@ -242,6 +243,8 @@ if choice == 'Summarize Via Text':
             res = requests.get(url)
         except:
             st.warning('Error in website', icon="⚠️")
+            time.sleep(5)
+            st.stop()
             
             
      
