@@ -195,7 +195,7 @@ if choice == 'Summarize Via Text':
     article_text = re.sub("[A-Z]\Z", '', article_text)
     article_text = re.sub(r'\s+', ' ', article_text)
 
-    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY"])
+    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY","Genism"])
                                                      # "Genism"])
     if st.button("Summarize Via Text"):
         if summary_choice == 'NLTK':
