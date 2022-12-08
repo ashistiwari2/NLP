@@ -44,6 +44,37 @@ def lex_rank(docx):
     final_sentence = ' '.join(dp)
     return final_sentence
 #-----------------------------------
+#--------------------------------
+#using Lunh
+from sumy.summarizers.luhn import LuhnSummarizer
+def luhn(docx):
+    
+    parser = PlaintextParser.from_string(docx, Tokenizer("english"))
+    summarizer_luhn = LuhnSummarizer()
+    summary_1 = summarizer_luhn(parser.document, 2)
+    dp = []
+    for i in summary_1:
+        
+        lp = str(i)
+        dp.append(lp)
+    final_sentence = ' '.join(dp)
+    return final_sentence
+#--------------------------------------
+#---------------------------------------
+#LSA Latent Semantic Analyzer (LSA)
+from sumy.summarizers.lsa import LsaSummarizer
+def lsa(docx):
+     parser = PlaintextParser.from_string(docx, Tokenizer("english"))
+    summarizer_lsa = LsaSummarizer()
+    summary_2 = summarizer_lsa(parser.document, 2)
+    dp = []
+    for i in summary_2:
+        lp = str(i)
+        dp.append(lp)
+    final_sentence = ' '.join(dp)
+    return final_sentence
+#----------------------------------------
+
 #Function for NLTK
 def _create_frequency_table(text_string) -> dict:
     print("------------------------------")
@@ -208,7 +239,7 @@ if choice == 'Summarize Via Text':
     article_text = re.sub("[A-Z]\Z", '', article_text)
     article_text = re.sub(r'\s+', ' ', article_text)
 
-    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY","Genism","LEX Rank"])
+    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY","Genism","LEX Rank","Luhn","LSA"])
                                                      # "Genism"])
     if st.button("Summarize Via Text"):
         if summary_choice == 'NLTK':
@@ -225,6 +256,10 @@ if choice == 'Summarize Via Text':
             summary_result = summarize(article_text)
         elif summary_choice == 'LEX Rank':
             summary_result = lex_rank(article_text)
+        elif summary_choice == 'Luhn':
+            summary_result = luhn(article_text)
+        elif summary_choice == 'LSA':
+            summary_result = lsa(article_text)
         print(summary_result)
         st.write(summary_result)
 
