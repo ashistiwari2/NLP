@@ -1,7 +1,13 @@
 #genism package
 #from gensim.summarization.summarizer import summarize
 # NLTK Packages
+import spacy
+from spacy.lang.en.stop_words import STOP_WORDS
+from string import punctuation
+from collections import Counter
+from heapq import nlargest
 import nltk
+import re
 nltk.download('stopwords')
 import streamlit as st
 nltk.download('punkt')
@@ -9,11 +15,11 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 #SPACY Packages
-import spacy
-from spacy.lang.en.stop_words import STOP_WORDS
+
 #Function for NLTK
 def _create_frequency_table(text_string) -> dict:
-
+    print("------------------------------")
+    print("frequency func executed well\n")
     stopWords = set(stopwords.words("english"))
     words = word_tokenize(text_string)
     ps = PorterStemmer()
@@ -32,7 +38,8 @@ def _create_frequency_table(text_string) -> dict:
     sent_tokenize(text_string)
 def _score_sentences(sentences, freqTable) -> dict:
     sentenceValue = dict()
-
+    print("------------------------------")
+    print("score func executed well\n")
     for sentence in sentences:
         word_count_in_sentence = (len(word_tokenize(sentence)))
         for wordValue in freqTable:
@@ -47,6 +54,8 @@ def _score_sentences(sentences, freqTable) -> dict:
     return sentenceValue
 def _find_average_score(sentenceValue) -> int:
     sumValues = 0
+    print("------------------------------")
+    print("average func executed well\n")
     for entry in sentenceValue:
         sumValues += sentenceValue[entry]
 
@@ -55,6 +64,8 @@ def _find_average_score(sentenceValue) -> int:
 
     return average
 def _generate_summary(sentences, sentenceValue, threshold):
+    print("------------------------------")
+    print("generate summary fun executed well\n")
     sentence_count = 0
     summary = ''
 
@@ -66,6 +77,8 @@ def _generate_summary(sentences, sentenceValue, threshold):
     return summary
 
 def nltk_summarizer(text):
+    print("------------------------------")
+    print("nltk func executed well\n")
     freq_table=_create_frequency_table(text)
     sentences=sent_tokenize(text)
     sentence_score=_score_sentences(sentences,freq_table)
@@ -75,27 +88,63 @@ def nltk_summarizer(text):
 
 #Function for SPACY
 def spacy_summarizer(docx):
-    stopwords=list(STOP_WORDS) #buiding a list of stopword
+    print("------------------------------")
+    print("spacy summ func executed well\n")
+    # stopwords=list(STOP_WORDS) #buiding a list of stopword
     nlp=spacy.blank("en")
+    #nlp=spacy.load('en')
     nlp.add_pipe('sentencizer')
-    docx1=nlp(docx)
-    mytoken=[token.text for token in docx1]
+    docx=nlp(docx)
+    # len(list(docx.sents))
+    # keyword=[]
+    # stopwords=list(STOP_WORDS)
+    # pos_tag=['PROPN','ADJ','NOUN','VERB']
+    # for token in docx:
+    #     if(token.text in stopwords or token.text in punctuation):
+    #         continue
+    #     if(token.pos_ in pos_tag):
+    #         keyword.append(token.text)
+    # freq_word=Counter(keyword)
+    # freq_word.most_common(7)
+    # max_freq=Counter(keyword).most_common(1)[0][1]
+    # for word in freq_word.keys():
+    #     freq_word[word]=(freq_word[word]/max_freq)
+    # freq_word.most_common(5)
+    # sent_strength={}
+    # for sent in docx.sents:
+    #     for word in sent:
+    #         if word.text in freq_word.keys():
+    #             if sent in sent_strength.keys():
+    #                 sent_strength[sent]+=freq_word[word.text]
+    #             else:
+    #                 sent_strength[sent]=freq_word[word.text]
+    # print(sent_strength)
+    # summarised_sentences=nlargest(3,sent_strength,key=sent_strength.get)
+    # print(summarised_sentences)
+    # print(type(summarised_sentences[0]))
+    # final_sentences=[w.text for w in summarised_sentences]
+    # summary=' '.join(final_sentences)
+    # print(summary)
+    # return summary
+
+    # mytoken=[token.text for token in docx1]
     #build word frequency
     word_frequencies={}
-    for word in docx1:
+    for word in docx:
         if word.text not in word_frequencies.keys():
             word_frequencies[word.text]=1
         else:
             word_frequencies[word.text]+=1
-    print(word_frequencies)
+    #print(word_frequencies)
     #maximum wword frequencies
     maximum_frequency=max(word_frequencies.values())
     for word in word_frequencies.keys():
         word_frequencies[word]=(word_frequencies[word]/maximum_frequency)
     #frequency table
-    print(word_frequencies)
+    #print(word_frequencies)
     #sentence tokens
-    sentence_list=[sentence for sentence in docx1.sents]
+    sentence_list=[sentence for sentence in docx.sents]
+    print(sentence_list)
     #sentence score
     sentence_scores={}
     for sent in sentence_list:
@@ -107,15 +156,15 @@ def spacy_summarizer(docx):
                     else:
                         sentence_scores[sent]+=word_frequencies[word.text.lower()]
 
-    from heapq import nlargest
-    summarised_sentences=nlargest(7,sentence_scores,key=sentence_scores.get)
+    summarised_sentences=nlargest(3,sentence_scores,key=sentence_scores.get)
+    print(summarised_sentences)
     for w in summarised_sentences:
-
         print(w.text)
+    final_sentences = [w.text for w in summarised_sentences]
+    summary = ''.join(final_sentences)
 
-    final_sentences=[w.text for w in summarised_sentences]
-    summary=''.join(final_sentences)
     return summary
+    print(summary)
 
 st.title("Text Summarizer App")
 activities = ["Summarize Via Text"]
@@ -136,9 +185,14 @@ if choice == 'Summarize Via Text':
     if st.button("Summarize Via Text"):
         if summary_choice == 'NLTK':
             summary_result = nltk_summarizer(article_text)
+
+            print(summary_result)
         elif summary_choice == 'SPACY':
             summary_result = spacy_summarizer(article_text)
+
+            print(summary_result)
         # elif summary_choice == 'Genism':
         #     summary_result = summarize(article_text)
-
+        print(summary_result)
         st.write(summary_result)
+
