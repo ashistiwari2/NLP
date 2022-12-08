@@ -64,7 +64,9 @@ def luhn(docx):
 #LSA Latent Semantic Analyzer (LSA)
 from sumy.summarizers.lsa import LsaSummarizer
 def lsa(docx):
-     parser = PlaintextParser.from_string(docx, Tokenizer("english"))
+    
+    
+    parser = PlaintextParser.from_string(docx, Tokenizer("english"))
     summarizer_lsa = LsaSummarizer()
     summary_2 = summarizer_lsa(parser.document, 2)
     dp = []
