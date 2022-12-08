@@ -15,6 +15,21 @@ from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 #SPACY Packages
+#-------------------------------------------------
+
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.text_rank import TextRankSummarizer
+def sumy(docx):
+    parser = PlaintextParser.from_string(docx, Tokenizer("english"))
+    summarizer=TextRankSummarizer()
+    summary=summarizer(parser.document,2)
+    text_summary=""
+    for sentence in summary:
+        text_summary+=str(sentence)
+    return text_summary
+
+#------------------------
 
 #Function for NLTK
 def _create_frequency_table(text_string) -> dict:
@@ -180,7 +195,7 @@ if choice == 'Summarize Via Text':
     article_text = re.sub("[A-Z]\Z", '', article_text)
     article_text = re.sub(r'\s+', ' ', article_text)
 
-    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY"])
+    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY"])
                                                      # "Genism"])
     if st.button("Summarize Via Text"):
         if summary_choice == 'NLTK':
@@ -189,6 +204,8 @@ if choice == 'Summarize Via Text':
             print(summary_result)
         elif summary_choice == 'SPACY':
             summary_result = spacy_summarizer(article_text)
+        elif summary_choice == 'SUMY':
+            summary_result = sumy(article_text)
 
             print(summary_result)
         # elif summary_choice == 'Genism':
