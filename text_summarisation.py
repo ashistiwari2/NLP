@@ -1,3 +1,5 @@
+import requests
+from bs4 import BeautifulSoup
 #genism package
 from gensim.summarization.summarizer import summarize
 # NLTK Packages
@@ -233,7 +235,34 @@ choice = st.sidebar.selectbox("Select Activity", activities)
 
 if choice == 'Summarize Via Text':
     st.subheader("Summary using NLP")
-    article_text = st.text_area("Enter Text Here", "Type here")
+    choice_1=st.selectbox("Text input(website or self)",["from web","paste text"])
+    if choice_1 =="from web":
+        url=st.text_area("Enter URL here","https://twitter.com/elonmusk")
+        res = requests.get(url)
+        html_page = res.content
+        soup = BeautifulSoup(html_page, 'html.parser')
+        text = soup.find_all(text=True)
+        article_text = ''
+        blacklist = [
+            '[document]',
+            'noscript',
+            'header',
+            'html',
+            'meta',
+            'head', 
+            'input',
+            'script',
+            # there may be more elements you don't want, such as "style", etc.
+        ]
+
+        for t in text:
+            if t.parent.name not in blacklist:
+                article_text += '{} '.format(t)
+     
+    elif choice_1=="paste text":
+         article_text = st.text_area("Enter Text Here", "Type here")
+
+   
     # cleaning of input text
     article_text = re.sub(r'\\[[0-9]*\\]', ' ', article_text)
     article_text = re.sub('[^a-zA-Z.,]', ' ', article_text)
