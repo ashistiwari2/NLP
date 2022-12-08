@@ -244,7 +244,7 @@ if choice == 'Summarize Via Text':
         except:
             st.warning('Error in website', icon="⚠️")
             time.sleep(5)
-            st.stop()
+            st.experimental_rerun()
             
             
      
