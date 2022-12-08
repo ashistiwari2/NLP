@@ -239,7 +239,7 @@ if choice == 'Summarize Via Text':
     choice_1=st.selectbox("Text input(website or self)",["from web","paste text"])
     if choice_1 =="from web":
         try:
-            url=st.text_area("Enter URL here","https://twitter.com/elonmusk")
+            url=st.text_area("Enter URL here","https://www.topcoder.com/thrive/articles/text-summarization-in-nlp")
             res = requests.get(url)
         except:
             st.warning('Error in website', icon="⚠️")
