@@ -1,5 +1,5 @@
 #genism package
-#from gensim.summarization.summarizer import summarize
+from gensim.summarization.summarizer import summarize
 # NLTK Packages
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
@@ -16,7 +16,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 #SPACY Packages
 #-------------------------------------------------
-
+#sumy 
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
@@ -208,8 +208,8 @@ if choice == 'Summarize Via Text':
             summary_result = sumy(article_text)
 
             print(summary_result)
-        # elif summary_choice == 'Genism':
-        #     summary_result = summarize(article_text)
+        elif summary_choice == 'Genism':
+            summary_result = summarize(article_text)
         print(summary_result)
         st.write(summary_result)
 
