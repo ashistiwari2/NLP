@@ -30,7 +30,20 @@ def sumy(docx):
     return text_summary
 
 #------------------------
-
+#---------------------
+#LEX RANK
+from sumy.summarizers.lex_rank import LexRankSummarizer
+def lex_rank(docx):
+    parser = PlaintextParser.from_string(docx, Tokenizer("english"))
+    summarizer = LexRankSummarizer()
+    summary = summarizer(parser.document, 2)
+    dp = []
+    for i in summary:
+        lp = str(i)
+        dp.append(lp)
+    final_sentence = ' '.join(dp)
+    return final_sentence
+#-----------------------------------
 #Function for NLTK
 def _create_frequency_table(text_string) -> dict:
     print("------------------------------")
@@ -195,7 +208,7 @@ if choice == 'Summarize Via Text':
     article_text = re.sub("[A-Z]\Z", '', article_text)
     article_text = re.sub(r'\s+', ' ', article_text)
 
-    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY","Genism"])
+    summary_choice = st.selectbox("Summary Choice", ["NLTK", "SPACY","SUMY","Genism","LEX Rank"])
                                                      # "Genism"])
     if st.button("Summarize Via Text"):
         if summary_choice == 'NLTK':
@@ -210,6 +223,8 @@ if choice == 'Summarize Via Text':
             print(summary_result)
         elif summary_choice == 'Genism':
             summary_result = summarize(article_text)
+        elif summary_choice == 'LEX Rank':
+            summary_result = lex_rank(article_text)
         print(summary_result)
         st.write(summary_result)
 
