@@ -237,8 +237,15 @@ if choice == 'Summarize Via Text':
     st.subheader("Summary using NLP")
     choice_1=st.selectbox("Text input(website or self)",["from web","paste text"])
     if choice_1 =="from web":
-        url=st.text_area("Enter URL here","https://twitter.com/elonmusk")
-        res = requests.get(url)
+        try:
+            url=st.text_area("Enter URL here","https://twitter.com/elonmusk")
+            res = requests.get(url)
+        except:
+            st.warning('Error in website', icon="⚠️")
+            
+            
+     
+        
         html_page = res.content
         soup = BeautifulSoup(html_page, 'html.parser')
         text = soup.find_all(text=True)
