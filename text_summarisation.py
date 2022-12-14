@@ -13,6 +13,7 @@ import nltk
 import re
 nltk.download('stopwords')
 import streamlit as st
+from PIL import Image
 nltk.download('punkt')
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
@@ -23,6 +24,9 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
+PAGE_TITLE="Web scrapping | Text Summarisation |By:Ashis Tiwari"
+im = Image.open("favicon.ico")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=im)
 def sumy(docx):
     parser = PlaintextParser.from_string(docx, Tokenizer("english"))
     summarizer=TextRankSummarizer()
